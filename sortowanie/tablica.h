@@ -25,11 +25,101 @@ public:
 
 	Typ & operator [] (unsigned int indeks) { return tab[indeks]; }
 	Typ   operator [] (unsigned int indeks) const { return tab[indeks]; }
+
+	void wypelnij_losowo();
+	void wypelnij_25posortowane();
+	void wypelnij_50posortowane();
+	void wypelnij_75posortowane();
+	void wypelnij_95posortowane();
+	void wypelnij_99posortowane();
+	void wypelnij_997posortowane();
+
 	void mergesort(unsigned int min, unsigned int max);
 	void merge(unsigned int min, unsigned int max);
+
 	void quicksort(unsigned int min, unsigned int max);
 	void sort(unsigned int min, unsigned int max);
 };
+
+template<typename Typ, unsigned int rozmiar>
+void Tablica<Typ, rozmiar>::wypelnij_losowo()
+{
+	for (int i = 0; i < rozmiar; i++) {
+		(*this)[i] = double(rand() % 1000); // (rand() % 10 + 1);
+	}
+}
+
+template<typename Typ, unsigned int rozmiar>
+void Tablica<Typ, rozmiar>::wypelnij_25posortowane()
+{
+	for (int i = 0 ; i < rozmiar * 0.25 ; i++) {
+		(*this)[i] = double(rand() % 250); // (rand() % 10 + 1);
+	}
+	(*this).mergesort(0, rozmiar * 0.25 - 1);
+	for (int i = rozmiar * 0.25; i < rozmiar ; i++) {
+		(*this)[i] = double(rand() % 750)+250; // (rand() % 10 + 1) + 25;
+	}
+}
+
+template<typename Typ, unsigned int rozmiar>
+void Tablica<Typ, rozmiar>::wypelnij_50posortowane()
+{
+	for (int i = 0; i < rozmiar * 0.5; i++) {
+		(*this)[i] = double(rand() % 500); // (rand() % 10 + 1);
+	}
+	(*this).mergesort(0, rozmiar * 0.5 - 1);
+	for (int i = rozmiar * 0.5; i < rozmiar; i++) {
+		(*this)[i] = double(rand() % 500) + 500; // (rand() % 10 + 1) + 25;
+	}
+}
+
+template<typename Typ, unsigned int rozmiar>
+void Tablica<Typ, rozmiar>::wypelnij_75posortowane()
+{
+	for (int i = 0; i < rozmiar * 0.75; i++) {
+		(*this)[i] = double(rand() % 750); // (rand() % 10 + 1);
+	}
+	(*this).mergesort(0, rozmiar * 0.75 - 1);
+	for (int i = rozmiar * 0.75; i < rozmiar; i++) {
+		(*this)[i] = double(rand() % 250) + 750; // (rand() % 10 + 1) + 25;
+	}
+}
+
+template<typename Typ, unsigned int rozmiar>
+void Tablica<Typ, rozmiar>::wypelnij_95posortowane()
+{
+	for (int i = 0; i < rozmiar * 0.95; i++) {
+		(*this)[i] = double(rand() % 950); // (rand() % 10 + 1);
+	}
+	(*this).mergesort(0, rozmiar * 0.95 - 1);
+	for (int i = rozmiar * 0.95; i < rozmiar; i++) {
+		(*this)[i] = double(rand() % 50) + 950; // (rand() % 10 + 1) + 25;
+	}
+}
+
+template<typename Typ, unsigned int rozmiar>
+void Tablica<Typ, rozmiar>::wypelnij_99posortowane()
+{
+	for (int i = 0; i < rozmiar * 0.99; i++) {
+		(*this)[i] = double(rand() % 990); // (rand() % 10 + 1);
+	}
+	(*this).mergesort(0, rozmiar * 0.99 - 1);
+	for (int i = rozmiar * 0.99; i < rozmiar; i++) {
+		(*this)[i] = double(rand() % 10) + 990; // (rand() % 10 + 1) + 25;
+	}
+}
+
+template<typename Typ, unsigned int rozmiar>
+void Tablica<Typ, rozmiar>::wypelnij_997posortowane()
+{
+	for (int i = 0; i < rozmiar * 0.997; i++) {
+		(*this)[i] = double(rand() % 997); // (rand() % 10 + 1);
+	}
+	(*this).mergesort(0, rozmiar * 0.997 - 1);
+	for (int i = rozmiar * 0.997; i < rozmiar; i++) {
+		(*this)[i] = double(rand() % 3) + 997; // (rand() % 10 + 1) + 25;
+	}
+}
 
 template<typename Typ, unsigned int rozmiar>
 void Tablica<Typ, rozmiar>::mergesort(unsigned int min, unsigned int max)

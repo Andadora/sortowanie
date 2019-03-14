@@ -10,12 +10,10 @@ using namespace std;
 int main()
 {
 	srand(time(NULL));
-	const int rozmiar = 10;
+	const int rozmiar = 12;
 	Tablica<int, rozmiar> liczby;
 
-	for (int i = 0; i < rozmiar; i++) {
-		liczby[i] = double(rand() % 100); // (rand() % 10 + 1);
-	}
+	liczby.wypelnij_75posortowane();
 
 	int ind_min = 0;
 	int ind_max = rozmiar - 1;
