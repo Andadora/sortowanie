@@ -10,19 +10,19 @@ using namespace std;
 int main()
 {
 	srand(time(NULL));
-	const int rozmiar = 12;
+	const int rozmiar = 11;
 	Tablica<int, rozmiar> liczby;
 
-	liczby.wypelnij_75posortowane();
+	liczby.wypelnij_posortowane_odwrotnie();
 
-	int ind_min = 0;
-	int ind_max = rozmiar - 1;
+	int min = 0;
+	int max = rozmiar - 1;
 
 	cout << liczby << "\n";
 
-	liczby.mergesort(ind_min, ind_max);
+	liczby.quicksort(min, max);
 
-	cout << "\n Posortowane liczby (quicksort): \n" << liczby << "\n";
+	cout << "\n Posortowane liczby: \n" << liczby << "\n";
 
 	return 0;
 }

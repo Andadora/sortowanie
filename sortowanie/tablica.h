@@ -33,6 +33,9 @@ public:
 	void wypelnij_95posortowane();
 	void wypelnij_99posortowane();
 	void wypelnij_997posortowane();
+	void wypelnij_posortowane_odwrotnie();
+
+	void odwroc();
 
 	void mergesort(unsigned int min, unsigned int max);
 	void merge(unsigned int min, unsigned int max);
@@ -118,6 +121,24 @@ void Tablica<Typ, rozmiar>::wypelnij_997posortowane()
 	(*this).mergesort(0, rozmiar * 0.997 - 1);
 	for (int i = rozmiar * 0.997; i < rozmiar; i++) {
 		(*this)[i] = double(rand() % 3) + 997; // (rand() % 10 + 1) + 25;
+	}
+}
+
+template<typename Typ, unsigned int rozmiar>
+void Tablica<Typ, rozmiar>::wypelnij_posortowane_odwrotnie()
+{
+	(*this).wypelnij_losowo();
+	(*this).mergesort(0,rozmiar-1);
+	(*this).odwroc();
+}
+
+template<typename Typ, unsigned int rozmiar>
+void Tablica<Typ, rozmiar>::odwroc() {
+	Typ temp = 0;
+	for (int i = 0; i < rozmiar / 2 ; i++) {
+		temp = (*this)[i];
+		(*this)[i] = (*this)[rozmiar - 1 - i];
+		(*this)[rozmiar - 1 - i] = temp;
 	}
 }
 
