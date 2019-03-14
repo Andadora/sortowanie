@@ -36,6 +36,7 @@ public:
 	void wypelnij_posortowane_odwrotnie();
 
 	void odwroc();
+	bool czy_posortowane();
 
 	void mergesort(unsigned int min, unsigned int max);
 	void merge(unsigned int min, unsigned int max);
@@ -140,6 +141,23 @@ void Tablica<Typ, rozmiar>::odwroc() {
 		(*this)[i] = (*this)[rozmiar - 1 - i];
 		(*this)[rozmiar - 1 - i] = temp;
 	}
+}
+
+template<typename Typ, unsigned int rozmiar>
+bool Tablica<Typ, rozmiar>::czy_posortowane()
+{
+	unsigned int i = 0;
+	while (i < rozmiar - 1) {
+		if ((*this)[i] < (*this)[i + 1]) {
+			i++;
+		}
+		else {
+			cout << "liczby nie sa posortowane \n";
+			return false;
+		}
+	}
+	cout << "liczby sa posortowane \n";
+	return true;
 }
 
 template<typename Typ, unsigned int rozmiar>
