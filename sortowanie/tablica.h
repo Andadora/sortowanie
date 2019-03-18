@@ -37,12 +37,16 @@ public:
 
 	void odwroc();
 	bool czy_posortowane();
+	void swap(unsigned int first, unsigned int second);
 
 	void mergesort(unsigned int min, unsigned int max);
 	void merge(unsigned int min, unsigned int max);
 
 	void quicksort(unsigned int min, unsigned int max);
 	void sort(unsigned int min, unsigned int max);
+
+	void heapsort(unsigned int min, unsigned int max);
+	void maxheap(unsigned int parent, unsigned int size);
 };
 
 template<typename Typ, unsigned int rozmiar>
@@ -148,7 +152,7 @@ bool Tablica<Typ, rozmiar>::czy_posortowane()
 {
 	unsigned int i = 0;
 	while (i < rozmiar - 1) {
-		if ((*this)[i] < (*this)[i + 1]) {
+		if ((*this)[i] <= (*this)[i + 1]) {
 			i++;
 		}
 		else {
@@ -158,6 +162,15 @@ bool Tablica<Typ, rozmiar>::czy_posortowane()
 	}
 	cout << "liczby sa posortowane \n";
 	return true;
+}
+
+template<typename Typ, unsigned int rozmiar>
+void Tablica<Typ, rozmiar>::swap(unsigned int first, unsigned int second)
+{
+	Typ temp = 0;
+	temp = (*this)[first];
+	(*this)[first] = (*this)[second];
+	(*this)[second] = temp;
 }
 
 template<typename Typ, unsigned int rozmiar>
@@ -245,6 +258,41 @@ void Tablica<Typ, rozmiar>::sort(unsigned int min, unsigned int max)
 	}
 	if (border + 1 < max) {
 		(*this).quicksort(border + 1, max);
+	}
+}
+
+template<typename Typ, unsigned int rozmiar>
+void Tablica<Typ, rozmiar>::heapsort(unsigned int min, unsigned int max)
+{
+	unsigned int size = rozmiar;
+	while (size > 1) {
+		for (int i = size / 2 - 1; i >= 0; i--) {
+			(*this).maxheap(i, size);
+		}
+		(*this).swap(0, size - 1);
+		size--;
+	}
+}
+
+template<typename Typ, unsigned int rozmiar>
+void Tablica<Typ, rozmiar>::maxheap(unsigned int parent, unsigned int size)
+{
+	if (2 * parent + 2 < size) {
+		if ((*this)[2 * parent + 2] > (*this)[2 * parent + 1]) {
+			if ((*this)[2 * parent + 2] > (*this)[parent]) {
+				(*this).swap(2 * parent + 2, parent);
+				maxheap(2 * parent + 2, size);
+			}
+		}
+		else if ((*this)[2 * parent + 1] > (*this)[parent]) {
+			(*this).swap(2 * parent + 1, parent);
+			maxheap(2 * parent + 1, size);
+		}
+	}
+	else if (2 * parent + 1 < size) {
+		if ((*this)[2 * parent + 1] > (*this)[parent]) {
+			(*this).swap(2 * parent + 1, parent);
+		}
 	}
 }
 
