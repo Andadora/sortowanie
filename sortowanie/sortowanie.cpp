@@ -20,7 +20,7 @@ int main()
 
 	cout << liczby << "\n";
 
-	liczby.heapsort(min, max);
+	liczby.heapsort(2, 6);
 
 	cout << "\n Posortowane liczby: \n" << liczby << "\n\n";
 

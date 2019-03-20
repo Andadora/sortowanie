@@ -44,16 +44,20 @@ public:
 
 	void quicksort(unsigned int min, unsigned int max);
 	void sort(unsigned int min, unsigned int max);
+	void cut_off_quicksort(unsigned int min, unsigned int max, int M);
+	void cut_off_sort(unsigned int min, unsigned int max, int M);
 
 	void heapsort(unsigned int min, unsigned int max);
-	void maxheap(unsigned int parent, unsigned int min, unsigned int max);
+	void maxheap(unsigned int parent, unsigned int min, unsigned int size);
+
+	void introsort(unsigned int min, unsigned int max);
 };
 
 template<typename Typ, unsigned int rozmiar>
 void Tablica<Typ, rozmiar>::wypelnij_losowo()
 {
 	for (int i = 0; i < rozmiar; i++) {
-		(*this)[i] = double(rand() % 1000); // (rand() % 10 + 1);
+		(*this)[i] = double(rand() % 1000);
 	}
 }
 
@@ -255,38 +259,83 @@ void Tablica<Typ, rozmiar>::sort(unsigned int min, unsigned int max)
 }
 
 template<typename Typ, unsigned int rozmiar>
+void Tablica<Typ, rozmiar>::cut_off_quicksort(unsigned int min, unsigned int max, int M)
+{
+	if (M) {
+		unsigned int pivot = rand() % (max - min) + min;
+		(*this).swap(max, pivot);
+		(*this).cut_off_sort(min, max, M);
+	}
+	else {
+		(*this).heapsort(min, max);
+	}
+}
+
+template<typename Typ, unsigned int rozmiar>
+void Tablica<Typ, rozmiar>::cut_off_sort(unsigned int min, unsigned int max, int M)
+{
+	int border = min;
+	unsigned int k = min;
+
+	while (k < max) {
+		if ((*this)[k] < (*this)[max]) {
+			(*this).swap(k, border);
+			k++;
+			border++;
+		}
+		else {
+			k++;
+		}
+	}
+	(*this).swap(max, border);
+	if (min + 1 < border) {
+		(*this).cut_off_quicksort(min, border - 1, M - 1);
+	}
+	if (border + 1 < max) {
+		(*this).cut_off_quicksort(border + 1, max, M - 1);
+	}
+}
+
+template<typename Typ, unsigned int rozmiar>
 void Tablica<Typ, rozmiar>::heapsort(unsigned int min, unsigned int max)
 {
 	unsigned int size = max - min + 1;
 	while (size > 1) {
 		for (int i = size / 2 - 1; i >= 0; i--) {
-			(*this).maxheap(i + min, min, size - 1);
+			(*this).maxheap(i, min, size);
 		}
-		(*this).swap(0, size - 1);
+		(*this).swap(min, size - 1 + min);
 		size--;
 	}
 }
 
 template<typename Typ, unsigned int rozmiar>
-void Tablica<Typ, rozmiar>::maxheap(unsigned int parent, unsigned int min, unsigned int max)
+void Tablica<Typ, rozmiar>::maxheap(unsigned int parent, unsigned int min, unsigned int size)
 {
-	if (2 * parent + 2 <= max) {
-		if ((*this)[2 * parent + 2] > (*this)[2 * parent + 1]) {
-			if ((*this)[2 * parent + 2] > (*this)[parent]) {
-				(*this).swap(2 * parent + 2, parent);
-				maxheap(2 * parent + 2, 2 * parent + 2, max);
+	if (2 * parent + 2 < size) {
+		if ((*this)[2 * parent + 2 + min] > (*this)[2 * parent + 1 + min]) {
+			if ((*this)[2 * parent + 2 + min] > (*this)[parent + min]) {
+				(*this).swap(2 * parent + 2 + min, parent + min);
+				maxheap(2 * parent + 2, min, size);
 			}
 		}
-		else if ((*this)[2 * parent + 1] > (*this)[parent]) {
-			(*this).swap(2 * parent + 1, parent);
-			maxheap(2 * parent + 1, 2 * parent + 1, max);
+		else if ((*this)[2 * parent + 1 + min] > (*this)[parent + min]) {
+			(*this).swap(2 * parent + 1 + min, parent + min);
+			maxheap(2 * parent + 1, min, size);
 		}
 	}
-	else if (2 * parent + 1 <= max) {
-		if ((*this)[2 * parent + 1] > (*this)[parent]) {
-			(*this).swap(2 * parent + 1, parent);
+	else if (2 * parent + 1 < size) {
+		if ((*this)[2 * parent + 1 + min] > (*this)[parent + min]) {
+			(*this).swap(2 * parent + 1 + min, parent + min);
 		}
 	}
+}
+
+template<typename Typ, unsigned int rozmiar>
+void Tablica<Typ, rozmiar>::introsort(unsigned int min, unsigned int max)
+{
+	int M = log2(max - min + 1);
+	(*this).cut_off_quicksort(min, max, M);
 }
 
 template <typename Typ, unsigned int rozmiar>
