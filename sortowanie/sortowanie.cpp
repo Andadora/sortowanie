@@ -10,7 +10,7 @@ using namespace std;
 int main()
 {
 	srand(time(NULL));
-	const int rozmiar = 100;
+	const int rozmiar = 10;
 	Tablica<int, rozmiar> liczby;
 
 	liczby.wypelnij_losowo();
@@ -22,7 +22,7 @@ int main()
 
 	liczby.heapsort(min, max);
 
-	cout << "\n Posortowane liczby: \n" << liczby << "\n";
+	cout << "\n Posortowane liczby: \n" << liczby << "\n\n";
 
 	liczby.czy_posortowane();
 

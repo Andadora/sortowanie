@@ -46,7 +46,7 @@ public:
 	void sort(unsigned int min, unsigned int max);
 
 	void heapsort(unsigned int min, unsigned int max);
-	void maxheap(unsigned int parent, unsigned int size);
+	void maxheap(unsigned int parent, unsigned int min, unsigned int max);
 };
 
 template<typename Typ, unsigned int rozmiar>
@@ -224,24 +224,19 @@ template<typename Typ, unsigned int rozmiar>
 void Tablica<Typ, rozmiar>::quicksort(unsigned int min, unsigned int max)
 {
 	unsigned int pivot = rand() % (max - min) + min;
-	Typ temp = (*this)[pivot];
-	(*this)[pivot] = (*this)[max];
-	(*this)[max] = temp;
+	(*this).swap(max, pivot);
 	(*this).sort(min, max);
 }
 
 template<typename Typ, unsigned int rozmiar>
 void Tablica<Typ, rozmiar>::sort(unsigned int min, unsigned int max)
 {
-	Typ temp = 0;
 	int border = min;
 	unsigned int k = min;
 
 	while (k < max) {
 		if ((*this)[k] < (*this)[max]) {
-			temp = (*this)[border];
-			(*this)[border] = (*this)[k];
-			(*this)[k] = temp;
+			(*this).swap(k, border);
 			k++;
 			border++;
 		}
@@ -249,9 +244,7 @@ void Tablica<Typ, rozmiar>::sort(unsigned int min, unsigned int max)
 			k++;
 		}
 	}
-	temp = (*this)[border];
-	(*this)[border] = (*this)[max];
-	(*this)[max] = temp;
+	(*this).swap(max, border);
 
 	if (min + 1 < border) {
 		(*this).quicksort(min, border - 1);
@@ -264,10 +257,10 @@ void Tablica<Typ, rozmiar>::sort(unsigned int min, unsigned int max)
 template<typename Typ, unsigned int rozmiar>
 void Tablica<Typ, rozmiar>::heapsort(unsigned int min, unsigned int max)
 {
-	unsigned int size = rozmiar;
+	unsigned int size = max - min + 1;
 	while (size > 1) {
 		for (int i = size / 2 - 1; i >= 0; i--) {
-			(*this).maxheap(i, size);
+			(*this).maxheap(i + min, min, size - 1);
 		}
 		(*this).swap(0, size - 1);
 		size--;
@@ -275,21 +268,21 @@ void Tablica<Typ, rozmiar>::heapsort(unsigned int min, unsigned int max)
 }
 
 template<typename Typ, unsigned int rozmiar>
-void Tablica<Typ, rozmiar>::maxheap(unsigned int parent, unsigned int size)
+void Tablica<Typ, rozmiar>::maxheap(unsigned int parent, unsigned int min, unsigned int max)
 {
-	if (2 * parent + 2 < size) {
+	if (2 * parent + 2 <= max) {
 		if ((*this)[2 * parent + 2] > (*this)[2 * parent + 1]) {
 			if ((*this)[2 * parent + 2] > (*this)[parent]) {
 				(*this).swap(2 * parent + 2, parent);
-				maxheap(2 * parent + 2, size);
+				maxheap(2 * parent + 2, 2 * parent + 2, max);
 			}
 		}
 		else if ((*this)[2 * parent + 1] > (*this)[parent]) {
 			(*this).swap(2 * parent + 1, parent);
-			maxheap(2 * parent + 1, size);
+			maxheap(2 * parent + 1, 2 * parent + 1, max);
 		}
 	}
-	else if (2 * parent + 1 < size) {
+	else if (2 * parent + 1 <= max) {
 		if ((*this)[2 * parent + 1] > (*this)[parent]) {
 			(*this).swap(2 * parent + 1, parent);
 		}
@@ -304,7 +297,6 @@ ostream& operator << (ostream &Strm, const Tablica<Typ, rozmiar>& Tab)
 	}
 	return Strm;
 }
-
 
 template <typename Typ, unsigned int rozmiar>
 istream& operator >> (istream &Strm, Tablica<Typ, rozmiar>& Tab)
