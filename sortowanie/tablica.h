@@ -164,7 +164,6 @@ bool Tablica<Typ, rozmiar>::czy_posortowane()
 			return false;
 		}
 	}
-	cout << "liczby sa posortowane \n";
 	return true;
 }
 
