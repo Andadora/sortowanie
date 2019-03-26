@@ -50,7 +50,7 @@ public:
 	void cut_off_sort_old(unsigned int min, unsigned int max, int M);
 
 	void quicksort(int min, int max);
-	void cut_off_quicksort(unsigned int min, unsigned int max, int M);
+	void cut_off_quicksort(int min, int max, int M);
 
 	void heapsort_old(unsigned int min, unsigned int max);
 	void maxheap_old(unsigned int parent, unsigned int min, unsigned int size);
@@ -348,7 +348,7 @@ void Tablica<Typ, rozmiar>::quicksort(int min, int max)
 }
 
 template<typename Typ, unsigned int rozmiar>
-void Tablica<Typ, rozmiar>::cut_off_quicksort(unsigned int min, unsigned int max, int M)
+void Tablica<Typ, rozmiar>::cut_off_quicksort(int min, int max, int M)
 {
 	if (min < max) {
 		if (M > 0) {
@@ -361,7 +361,6 @@ void Tablica<Typ, rozmiar>::cut_off_quicksort(unsigned int min, unsigned int max
 				while (vpivot < (*this)[--j]);
 				if (i <= j) {
 					(*this).swap(i, j);
-					cout << (*this) << "\n";
 				}
 				else break;
 			}

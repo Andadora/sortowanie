@@ -197,6 +197,6 @@ int main()
 		liczby5.czy_posortowane();
 		if (i % 8 == 7) cout << "\n";
 	}
-
+	
 	return 0;
 }
