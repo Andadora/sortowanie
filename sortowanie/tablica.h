@@ -45,9 +45,7 @@ public:
 	void merge(unsigned int min, unsigned int max);
 
 	void quicksort_old(unsigned int min, unsigned int max);
-	void sort_old(unsigned int min, unsigned int max);
 	void cut_off_quicksort_old(unsigned int min, unsigned int max, int M);
-	void cut_off_sort_old(unsigned int min, unsigned int max, int M);
 
 	void quicksort(int min, int max);
 	void cut_off_quicksort(int min, int max, int M);
@@ -73,73 +71,43 @@ void Tablica<Typ, rozmiar>::wypelnij_losowo()
 template<typename Typ, unsigned int rozmiar>
 void Tablica<Typ, rozmiar>::wypelnij_25posortowane()
 {
-	for (int i = 0 ; i < rozmiar * 0.25 ; i++) {
-		(*this)[i] = double(rand() % 250); // (rand() % 10 + 1);
-	}
+	(*this).wypelnij_losowo();
 	(*this).heapsort(0, rozmiar * 0.25 - 1);
-	for (int i = rozmiar * 0.25; i < rozmiar ; i++) {
-		(*this)[i] = double(rand() % 750)+250; // (rand() % 10 + 1) + 25;
-	}
 }
 
 template<typename Typ, unsigned int rozmiar>
 void Tablica<Typ, rozmiar>::wypelnij_50posortowane()
 {
-	for (int i = 0; i < rozmiar * 0.5; i++) {
-		(*this)[i] = double(rand() % 500); // (rand() % 10 + 1);
-	}
+	(*this).wypelnij_losowo();
 	(*this).heapsort(0, rozmiar * 0.5 - 1);
-	for (int i = rozmiar * 0.5; i < rozmiar; i++) {
-		(*this)[i] = double(rand() % 500) + 500; // (rand() % 10 + 1) + 25;
-	}
 }
 
 template<typename Typ, unsigned int rozmiar>
 void Tablica<Typ, rozmiar>::wypelnij_75posortowane()
 {
-	for (int i = 0; i < rozmiar * 0.75; i++) {
-		(*this)[i] = double(rand() % 750); // (rand() % 10 + 1);
-	}
+	(*this).wypelnij_losowo();
 	(*this).heapsort(0, rozmiar * 0.75 - 1);
-	for (int i = rozmiar * 0.75; i < rozmiar; i++) {
-		(*this)[i] = double(rand() % 250) + 750; // (rand() % 10 + 1) + 25;
-	}
 }
 
 template<typename Typ, unsigned int rozmiar>
 void Tablica<Typ, rozmiar>::wypelnij_95posortowane()
 {
-	for (int i = 0; i < rozmiar * 0.95; i++) {
-		(*this)[i] = double(rand() % 950); // (rand() % 10 + 1);
-	}
+	(*this).wypelnij_losowo();
 	(*this).heapsort(0, rozmiar * 0.95 - 1);
-	for (int i = rozmiar * 0.95; i < rozmiar; i++) {
-		(*this)[i] = double(rand() % 50) + 950; // (rand() % 10 + 1) + 25;
-	}
 }
 
 template<typename Typ, unsigned int rozmiar>
 void Tablica<Typ, rozmiar>::wypelnij_99posortowane()
 {
-	for (int i = 0; i < rozmiar * 0.99; i++) {
-		(*this)[i] = double(rand() % 990); // (rand() % 10 + 1);
-	}
+	(*this).wypelnij_losowo();
 	(*this).heapsort(0, rozmiar * 0.99 - 1);
-	for (int i = rozmiar * 0.99; i < rozmiar; i++) {
-		(*this)[i] = double(rand() % 10) + 990; // (rand() % 10 + 1) + 25;
-	}
 }
 
 template<typename Typ, unsigned int rozmiar>
 void Tablica<Typ, rozmiar>::wypelnij_997posortowane()
 {
-	for (int i = 0; i < rozmiar * 0.997; i++) {
-		(*this)[i] = double(rand() % 997); // (rand() % 10 + 1);
-	}
+	(*this).wypelnij_losowo();
 	(*this).heapsort(0, rozmiar * 0.997 - 1);
-	for (int i = rozmiar * 0.997; i < rozmiar; i++) {
-		(*this)[i] = double(rand() % 3) + 997; // (rand() % 10 + 1) + 25;
-	}
 }
 
 template<typename Typ, unsigned int rozmiar>
@@ -257,12 +225,7 @@ void Tablica<Typ, rozmiar>::quicksort_old(unsigned int min, unsigned int max)
 {
 	unsigned int pivot = (*this).mediana_z_trzech(rand() % (max - min) + min, rand() % (max - min) + min, rand() % (max - min) + min);
 	(*this).swap(max, pivot);
-	(*this).sort_old(min, max);
-}
 
-template<typename Typ, unsigned int rozmiar>
-void Tablica<Typ, rozmiar>::sort_old(unsigned int min, unsigned int max)
-{
 	int border = min;
 	unsigned int k = min;
 
@@ -290,37 +253,32 @@ template<typename Typ, unsigned int rozmiar>
 void Tablica<Typ, rozmiar>::cut_off_quicksort_old(unsigned int min, unsigned int max, int M)
 {
 	if (M>0) {
-		unsigned int pivot = rand() % (max - min) + min;
-		(*this).swap(max, pivot);
-		(*this).cut_off_sort_old(min, max, M);
+		unsigned int pivot = (*this).mediana_z_trzech(rand() % (max - min) + min, rand() % (max - min) + min, rand() % (max - min) + min);
+		(*this).swap(max, pivot); 
+		
+		int border = min;
+		unsigned int k = min;
+
+		while (k < max) {
+			if ((*this)[k] < (*this)[max]) {
+				(*this).swap(k, border);
+				k++;
+				border++;
+			}
+			else {
+				k++;
+			}
+		}
+		(*this).swap(max, border);
+		if (min + 1 < border) {
+			(*this).cut_off_quicksort_old(min, border - 1, M - 1);
+		}
+		if (border + 1 < max) {
+			(*this).cut_off_quicksort_old(border + 1, max, M - 1);
+		}
 	}
 	else {
 		(*this).heapsort(min, max);
-	}
-}
-
-template<typename Typ, unsigned int rozmiar>
-void Tablica<Typ, rozmiar>::cut_off_sort_old(unsigned int min, unsigned int max, int M)
-{
-	int border = min;
-	unsigned int k = min;
-
-	while (k < max) {
-		if ((*this)[k] < (*this)[max]) {
-			(*this).swap(k, border);
-			k++;
-			border++;
-		}
-		else {
-			k++;
-		}
-	}
-	(*this).swap(max, border);
-	if (min + 1 < border) {
-		(*this).cut_off_quicksort_old(min, border - 1, M - 1);
-	}
-	if (border + 1 < max) {
-		(*this).cut_off_quicksort_old(border + 1, max, M - 1);
 	}
 }
 
@@ -413,25 +371,19 @@ void Tablica<Typ, rozmiar>::maxheap_old(unsigned int parent, unsigned int min, u
 template<typename Typ, unsigned int rozmiar>
 void Tablica<Typ, rozmiar>::heap(int min, int max)
 {
-	for (int i = min; i < max + 1; i++)
+	for (int i = min; i <= max; i++)
 	{
 		int child = i;
 		int parent = (child + min - 1) / 2;
-		Typ inserted = (*this)[i];    // element wstawiany do kopca
+		Typ inserted = (*this)[i];
 
-		// przesuwanie w gore dopoki element wyzej jest mniejszy
 		while (child > min && (*this)[parent] < inserted)
 		{
-			// mniejszy element z wyzszej na nizsza galaz
 			(*this)[child] = (*this)[parent];
 
-			// przejscie indeksami wyzej
 			child = parent;
 			parent = (child + min - 1) / 2;
 		}
-
-		// wstawienie elementu na galaz
-		// do ktorej dotarla petla
 		(*this)[child] = inserted;
 	}
 }
@@ -441,23 +393,17 @@ void Tablica<Typ, rozmiar>::deheap(int min, int max)
 {
 	for (int i = max; i > min; i--)
 	{
-		// przerzucenie elementu ze szczytu kopca na koniec
-		// bo jest najwiekszy
 		(*this).swap(min, i);
 
-		// j - galaz wyzsza, k, m - galaz nizsza
 		int j = min, k = min + 1, m;
 
 		while (k < i)
 		{
-			// decyzja: lewa czy prawa odnoga?
 			if (k + 1 < i && (*this)[k + 1] > (*this)[k])
 				m = k + 1;
 			else
 				m = k;
 
-			// jesli jest nizej wiekszy element,
-			// to zamiana miejscami wyzszego z nizszym.
 			if ((*this)[m] > (*this)[j])
 			{
 				(*this).swap(j, m);

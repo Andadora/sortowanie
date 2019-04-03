@@ -127,7 +127,7 @@ int main()
 		liczby3.czy_posortowane();
 		if (i % 8 == 7) cout << "\n";
 	}
-
+	
 	max = rozmiar4 - 1;
 	cout << "500000;\nodwrotnie:;losowo:;25posortowane:;50posortowane:;75posortowane:;95posortowane:;99posortowane:;997posortowane:;\n";
 	for (i = 0; i < 800; i++) {
